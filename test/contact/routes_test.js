@@ -8,7 +8,7 @@ const Contact = mongoose.model('contacts'); // this is the collection name
 
 describe('Init test for mocha and routes', () => {
 
-  it('handles a GET request to /contact', (done) => {
+  it('handles a GET request to /contact', done => {
     request(app)
       .get('/contact/start')
       .end( (err, response) => {
@@ -17,42 +17,63 @@ describe('Init test for mocha and routes', () => {
       });
   });
 
-  // it('handles a POST request to /driver/create', (done) => {
-  //   request(app)
-  //     .post('/driver/create')
-  //     .send({ email: 'test@test.com'})
-  //     .end( (err, response) => {
-  //       assert(response.body.message === 'The driver test@test.com was successfully saved');
-  //       done();
-  //     });
-  // });
+  it('handles POST request to create new contact at contact/create', done => {
+    const testUser = new Contact({ name: 'John Doe', email: 'test@test.com'});
+    request(app)
+    .post('/contact/create')
+    .send(testUser)
+    .end( (err, response) => {
+      assert(response.body.contact.name === 'John Doe');
+      assert(response.body.contact.email === 'test@test.com');
+      done();
+    });
+  });
 
-  // it('handles a PUT request to /driver/edit', (done) => {
-  //   const updateTestDriver = new Driver({ email: 'test1@test.com', available: false })
-  //     updateTestDriver.save().then(() => {
-  //       request(app)
-  //         .put('/driver/edit')
-  //         .send({ email: 'test1@test.com', available: true })
-  //         .end( (err, response) => {
-  //            assert(response.body.message === 'you are availble to drive');
-  //           done();
-  //         });
-  //     })
-  // });
+  it('handles GET request to get all contacts at contact/create', done => {
+    const testUser = new Contact({ name: 'John Doe', email: 'test@test.com'});
+    const testUser2 = new Contact({ name: 'Jane Doe', email: 'test2@test.com'});
+    const testUser3 = new Contact({ name: 'John Snow', email: 'test3@test.com'});
+    Promise.all([ testUser.save(), testUser2.save(), testUser3.save() ])
+      .then( () => {
+        request(app)
+        .get('/contact')
+        .end( (err, response) => {
+          assert( response.body.length === 3 );
+          assert( typeof response.body === 'object' );
+          done();
+        });
+      });
+  });
 
-  // it('handles a DELETE request to /driver/delete', (done) => {
-  //   const deleteTestDriver = new Driver({ email: 'test2@test.com' })
-  //     deleteTestDriver.save().then(() => {
-  //       request(app)
-  //         .delete('/driver/delete?email=test2@test.com')
-  //         .end( () => {
-  //           Driver.findOne({ email: 'test2@test.com' })
-  //             .then( driver => {
-  //               assert(driver === null);
-  //             })
-  //           done();
-  //         });
-  //     })
-  // });
+  it('handles a PUT request to /contact/edit', (done) => {
+    const updateTestContact = new Contact({ name: 'John Doe', email: 'test@test.com' })
+      updateTestContact.save().then(() => {
+        request(app)
+          .put('/contact/edit')
+          .send({ email: 'test@test.com', name: 'Jane Doe' })
+          .end( (err, response) => {
+             assert(response.body.name === 'Jane Doe');
+             assert(response.body.email === 'test@test.com');
+            done();
+          });
+      })
+  });
+
+  it('handles a DELETE request to /contact/delete', (done) => {
+    const deleteTestContact = new Contact({ name: 'John Doe', email: 'test@test.com' })
+      deleteTestContact.save().then(() => {
+        request(app)
+          .delete('/contact/delete?email=test@test.com')
+          .end( (err, response) => {
+            assert(response.body.email === 'test@test.com');
+            assert(response.body.name === 'John Doe');
+            Contact.findOne({ email: 'test@test.com' })
+              .then( contact => {
+               assert(contact === null);
+              })
+            done();
+          });
+      })
+  });
 
 });
