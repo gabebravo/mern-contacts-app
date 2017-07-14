@@ -23,7 +23,7 @@ const createContact = (req, res) => {
 }
 
 const getContacts = (req, res) => {
-  Contact.find({}, { _id: 0, name: 1, email: 1 })
+  Contact.find({}, { _id: 1, name: 1, email: 1 })
     .then( contacts => {
       res.status(200).json(contacts);
     })
@@ -34,11 +34,12 @@ const getContacts = (req, res) => {
 }
 
 const editContact = (req, res) => {
-  Contact.findOneAndUpdate({email: req.body.email}, req.body, {new: true})
+  Contact.findByIdAndUpdate(req.body.id, { name: req.body.name, email: req.body.email}, {new: true})
     .then( contact => {
       res.status(200).json({
         name: contact.name,
-        email: contact.email
+        email: contact.email, 
+        message: 'the contact was successfully updated'
       });
     })
     .catch( error => {
@@ -48,7 +49,21 @@ const editContact = (req, res) => {
 }
 
 const deleteContact = (req, res) => {
-  Contact.findOneAndRemove({ email: req.query.email })
+  Contact.remove({ email: req.query.email })
+    .then( () => {
+      Contact.find({}, { _id: 0, name: 1, email: 1 })
+        .then( contacts => {
+          res.status(200).json({contacts, message: 'the contact was successfully deleted'});
+        })
+    })
+    .catch( error => {
+      console.log(error);
+      res.status(400).json({ message: error.message });
+    });
+}
+
+const findContact = (req, res) => {
+  Contact.findById(req.query.id, { _id: 0, name: 1, email: 1 })
     .then( contact => {
       res.status(200).json(contact);
     })
@@ -66,6 +81,7 @@ router.post('/create', createContact);
 router.get('/', getContacts);
 router.put('/edit', editContact);
 router.delete('/delete', deleteContact);
+router.get('/find', findContact);
 
 //export routes
 module.exports = router;

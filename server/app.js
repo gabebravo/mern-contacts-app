@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 if (process.env.NODE_ENV !== 'test') {
-  mongoose.connect('mongodb://localhost/contact',  {
+  mongoose.connect('mongodb://localhost/contacts',  {
     useMongoClient: true, // weird new flag mongoose requires
   });
 }
