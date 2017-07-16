@@ -25,6 +25,11 @@ body, .app {
     color: #676767;
 }
 
+.contact-list-no-results {
+  text-align: center;
+  margin-top: 2rem;
+}
+
 /* CreateContact */
 
 .close-create-contact {

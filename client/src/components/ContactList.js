@@ -19,10 +19,12 @@ const printContacts = (...args) => {
   })
 }
 
-const ContactList = props => (
-  <ol className='contact-list'>
-    {printContacts(props.contacts, props.handleDelete)}
-  </ol>
-);
+const ContactList = props => {
+  const contacts = props.contacts.length > 0 ?
+    <ol className='contact-list'>
+      {printContacts(props.contacts, props.handleDelete)}
+    </ol> : <h3 className='contact-list-no-results'>No Results Found</h3>
+  return contacts;
+}
 
 export default ContactList;

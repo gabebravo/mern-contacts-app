@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import ContactList from '../components/ContactList'
+import Searchbar from '../components/Searchbar'
 
 class ContactContainer extends Component {
   constructor(){
     super();
     this.state = {
-      contacts: null
+      contacts: null, 
+      searchTerm: ''
     }
   }
 
@@ -35,32 +36,27 @@ class ContactContainer extends Component {
     });
   }
 
+  updateQuery = (e) => {
+    this.setState({ searchTerm: e.target.value });
+  }
+
+  filterItems = (query) => {
+    let contactsArr = Array.from(this.state.contacts);
+    return contactsArr.filter( contact => {
+      return contact.name.toLowerCase().indexOf( query.toLowerCase() ) > -1; 
+    })
+  }
+
   render() {
-    const contacts = this.state.contacts ? 
-      <ContactList contacts={this.state.contacts} handleDelete={this.deleteContact} /> : '';
+    let contacts = '';
+    if (this.state.searchTerm.length > 0) {
+      contacts = <ContactList contacts={this.filterItems(this.state.searchTerm)} handleDelete={this.deleteContact} />
+    } else if (this.state.contacts) {
+      contacts = <ContactList contacts={this.state.contacts} handleDelete={this.deleteContact} />
+    } 
     return (
       <div className='list-contacts'>
-        <div className='list-contacts-top'>
-          <input
-            className='search-contacts'
-            type='text'
-            placeholder='Search contacts'
-            value=''
-            //onChange={(event) => this.updateQuery(event.target.value)}
-          />
-          <Link
-            to='/newContact'
-            className='add-contact'
-          >Add Contact</Link>
-        </div>
-
-        {/* {showingContacts.length !== contacts.length && (
-          <div className='showing-contacts'>
-            <span>Now showing {showingContacts.length} of {contacts.length} total</span>
-            <button onClick={this.clearQuery}>Show all</button>
-          </div>
-        )} */}
-
+        <Searchbar searchValue={this.state.searchTerm} queryHandler={this.updateQuery} />
         { contacts }
       </div>
     );
