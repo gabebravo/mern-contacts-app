@@ -2,25 +2,30 @@ import React, { Component } from 'react';
 import CreateForm from '../components/GeneralForm';
 import axios from 'axios';
 
+import Modal from '../components/Modal'
+
 class CreateUserContianer extends Component {
 
   constructor(props){
     super(props);
     this.state = {
       name: '',
-      email: ''
+      email: '', 
+      modalMessage: ''
     }
   }
 
   setName = (e) => {
     this.setState({
-      name: e.target.value
+      name: e.target.value, 
+      modalMessage: ''
     });
   }
 
   setEmail = (e) => {
     this.setState({
-      email: e.target.value
+      email: e.target.value, 
+      modalMessage: ''
     });
   }
 
@@ -30,10 +35,10 @@ class CreateUserContianer extends Component {
       email: this.state.email
     })
       .then( response => {
-        console.log(response.data.message);
         this.setState({
           name: '', 
-          email: ''
+          email: '', 
+          modalMessage: response.data.message
         });
       })
       .catch( error => {
@@ -43,11 +48,15 @@ class CreateUserContianer extends Component {
 
   render() {
     return (
-      <CreateForm btnText="Add Contact"
+      <div>
+        <CreateForm btnText="Add Contact"
         name={this.state.name} email={this.state.email}
         handleName={this.setName} handleEmail={this.setEmail}
         handleSubmit={this.setContactInfo} 
-      />
+        />
+        { this.state.modalMessage.length > 0 && ( 
+          <Modal message={this.state.modalMessage} /> )}
+      </div>
     );
   }
 }

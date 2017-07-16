@@ -3,13 +3,15 @@ import axios from 'axios';
 
 import ContactList from '../components/ContactList'
 import Searchbar from '../components/Searchbar'
+import Modal from '../components/Modal'
 
 class ContactContainer extends Component {
   constructor(){
     super();
     this.state = {
       contacts: null, 
-      searchTerm: ''
+      searchTerm: '', 
+      modalMessage: ''
     }
   }
 
@@ -28,8 +30,10 @@ class ContactContainer extends Component {
       params: { email: email }
     })
     .then( response => {
-      this.setState({ contacts: response.data.contacts });
-      console.log(response.data.message);
+      this.setState({ 
+        contacts: response.data.contacts, 
+        modalMessage: response.data.message 
+      });
     })
     .catch( error => {
       console.log(error);
@@ -37,7 +41,7 @@ class ContactContainer extends Component {
   }
 
   updateQuery = (e) => {
-    this.setState({ searchTerm: e.target.value });
+    this.setState({ searchTerm: e.target.value, modalMessage: '' });
   }
 
   filterItems = (query) => {
@@ -58,6 +62,8 @@ class ContactContainer extends Component {
       <div className='list-contacts'>
         <Searchbar searchValue={this.state.searchTerm} queryHandler={this.updateQuery} />
         { contacts }
+        { this.state.modalMessage.length > 0 && ( 
+        <Modal message={this.state.modalMessage} /> )}
       </div>
     );
   }
