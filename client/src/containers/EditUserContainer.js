@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EditForm from '../components/GeneralForm';
 import axios from 'axios';
+import Modal from '../components/Modal';
 
 class EditUserContianer extends Component {
 
@@ -8,11 +9,12 @@ class EditUserContianer extends Component {
     super(props);
     this.state = {
       name: '',
-      email: '', 
-      id: this.props.match.params.id
+      email: '',
+      id: this.props.match.params.id,
+      modalMessage: ''
     }
   }
-  
+
   componentDidMount(){
     axios.get('/contact/find', {
       params: { id: this.state.id }
@@ -44,8 +46,11 @@ class EditUserContianer extends Component {
       email: this.state.email
     })
       .then( response => {
-        console.log(response.data.message);
-        this.setState({ name: response.data.name, email: response.data.email });
+        this.setState({
+          name: response.data.name,
+          email: response.data.email,
+          modalMessage: response.data.message
+        });
       })
       .catch( error => {
         console.log(error);
@@ -54,11 +59,15 @@ class EditUserContianer extends Component {
 
   render() {
     return (
-      <EditForm btnText="Update Contact"
-        name={this.state.name} email={this.state.email}
-        handleName={this.setName} handleEmail={this.setEmail}
-        handleSubmit={this.updateContactInfo} 
-      />
+      <div>
+        <EditForm btnText="Update Contact"
+          name={this.state.name} email={this.state.email}
+          handleName={this.setName} handleEmail={this.setEmail}
+          handleSubmit={this.updateContactInfo}
+        />
+        { this.state.modalMessage.length > 0 && (
+        <Modal message={this.state.modalMessage} /> )}
+      </div>
     );
   }
 }
