@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 before( done => {
-  mongoose.connect('mongodb://localhost/contacts_test',  {
+  mongoose.connect('mongodb://admin:password@ds161742.mlab.com:61742/contacts_db',  {
     useMongoClient: true, // weird new flag mongoose requires
   });
   mongoose.connection
