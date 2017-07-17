@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const Searchbar = props => (
   <div className='list-contacts-top'>
@@ -16,5 +17,10 @@ const Searchbar = props => (
     >Add Contact</Link>
   </div>
 );
+
+Searchbar.propTypes = {
+  searchValue: PropTypes.string, 
+  queryHandler: PropTypes.func
+}
 
 export default Searchbar;

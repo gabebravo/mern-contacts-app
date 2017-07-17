@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 const printContacts = (...args) => {
   let [arr, deleteFunc] = args;
@@ -25,6 +26,11 @@ const ContactList = props => {
       {printContacts(props.contacts, props.handleDelete)}
     </ol> : <h3 className='contact-list-no-results'>No Results Found</h3>
   return contacts;
+}
+
+ContactList.propTypes = {
+  contacts: PropTypes.array,
+  handleDelete: PropTypes.func
 }
 
 export default ContactList;

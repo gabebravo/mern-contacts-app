@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Modal extends Component {
 
@@ -39,6 +40,10 @@ class Modal extends Component {
     </div>
     );
   }
+}
+
+Modal.propTypes = {
+  message: PropTypes.string
 }
 
 export default Modal;

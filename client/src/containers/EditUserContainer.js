@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EditForm from '../components/GeneralForm';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import Modal from '../components/Modal';
 
 class EditUserContianer extends Component {
@@ -72,6 +73,10 @@ class EditUserContianer extends Component {
       </div>
     );
   }
+}
+
+EditUserContianer.propTypes ={
+  id: PropTypes.string
 }
 
 export default EditUserContianer;

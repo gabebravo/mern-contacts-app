@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
 
 const GeneralForm = props => (
   <div>
@@ -15,5 +16,13 @@ const GeneralForm = props => (
     </div>
   </div>
 );
+
+GeneralForm.propTypes = {
+  name: PropTypes.string,
+  handleName: PropTypes.func, 
+  handleEmail: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  btnText: PropTypes.string
+}
 
 export default GeneralForm;
