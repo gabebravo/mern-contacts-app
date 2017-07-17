@@ -7,7 +7,7 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon index.js",
     "client": "nodemon start-client.js",
-    "test": "NODE_ENV=test node --exec 'mocha --recursive -R min'"
+    "test": "NODE_ENV=test mocha ./test"
   },
   "author": "",
   "license": "ISC",
