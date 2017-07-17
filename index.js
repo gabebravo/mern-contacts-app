@@ -1,5 +1,5 @@
 const app = require('./server/app');
-const PORT = 3001;
+const {PORT} = require('./config.js');
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
