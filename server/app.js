@@ -5,7 +5,7 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://admin:password@ds161742.mlab.com:61742/contacts_db',  {
+mongoose.connect(process.env.DB,  {
   useMongoClient: true, // weird new flag mongoose requires
 });
 
