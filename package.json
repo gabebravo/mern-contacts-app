@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "server": "node server.js",
-    "test": "NODE_ENV=test node --exec 'mocha --recursive -R min'"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "author": "Gabe Bravo - gabecbravo@gmail.com",
   "license": "ISC",
