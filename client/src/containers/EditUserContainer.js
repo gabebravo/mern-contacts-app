@@ -29,13 +29,15 @@ class EditUserContianer extends Component {
 
   setName = (e) => {
     this.setState({
-      name: e.target.value
+      name: e.target.value, 
+      modalMessage: ''
     });
   }
 
   setEmail = (e) => {
     this.setState({
-      email: e.target.value
+      email: e.target.value, 
+      modalMessage: ''
     });
   }
 
