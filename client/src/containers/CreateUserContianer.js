@@ -6,13 +6,10 @@ import Modal from '../components/Modal'
 
 class CreateUserContianer extends Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
+  state = {
       name: '',
       email: '', 
       modalMessage: ''
-    }
   }
 
   setName = (e) => {
@@ -47,15 +44,16 @@ class CreateUserContianer extends Component {
   }
 
   render() {
+    const { name, email, modalMessage } = this.state;
     return (
       <div>
         <CreateForm btnText="Add Contact"
-        name={this.state.name} email={this.state.email}
+        name={name} email={email}
         handleName={this.setName} handleEmail={this.setEmail}
         handleSubmit={this.setContactInfo} 
         />
-        { this.state.modalMessage.length > 0 && ( 
-          <Modal message={this.state.modalMessage} /> )}
+        { modalMessage.length > 0 && ( 
+          <Modal message={modalMessage} /> )}
       </div>
     );
   }

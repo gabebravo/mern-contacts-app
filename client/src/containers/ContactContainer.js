@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from 'react'
+import axios from 'axios'
+import escapeRegExp from 'escape-string-regexp'
+import sortBy from 'sort-by'
 
 import ContactList from '../components/ContactList'
 import Searchbar from '../components/Searchbar'
 import Modal from '../components/Modal'
 
 class ContactContainer extends Component {
-  constructor(){
-    super();
-    this.state = {
-      contacts: null, 
-      searchTerm: '', 
-      modalMessage: ''
-    }
+
+  state = {
+    contacts: [], 
+    searchTerm: '', 
+    modalMessage: ''
   }
 
   componentDidMount(){
@@ -41,27 +41,37 @@ class ContactContainer extends Component {
   }
 
   updateQuery = (e) => {
-    this.setState({ searchTerm: e.target.value, modalMessage: '' });
+    this.setState({ searchTerm: e.target.value.trim(), modalMessage: '' });
   }
 
   filterItems = (query) => {
-    let contactsArr = Array.from(this.state.contacts);
-    return contactsArr.filter( contact => {
-      return contact.name.toLowerCase().indexOf( query.toLowerCase() ) > -1; 
-    })
+    let contactsArr = Array.from(this.state.contacts); // make a copy of the current array, so as not to alter it
+    const match = new RegExp(escapeRegExp(query), 'i'); // defines regex pattern: escapeRegExp = special chars as literals not regex chars / ignore case
+    return contactsArr.filter( contact => match.test(contact.name)).sort(sortBy('name')); // only return matching instances 
   }
 
+  resetContacts = () => this.setState({ searchTerm: '' });
+
   render() {
-    let contacts = '';
-    if (this.state.searchTerm.length > 0) {
-      contacts = <ContactList contacts={this.filterItems(this.state.searchTerm)} handleDelete={this.deleteContact} />
-    } else if (this.state.contacts) {
-      contacts = <ContactList contacts={this.state.contacts} handleDelete={this.deleteContact} />
-    } 
+    let showingContacts = this.state.searchTerm.length > 0 ?
+      <ContactList contacts={this.filterItems(this.state.searchTerm)} 
+      handleDelete={this.deleteContact} /> : 
+      <ContactList contacts={this.state.contacts} handleDelete={this.deleteContact} />;
+
     return (
       <div className='list-contacts'>
+        {/* {JSON.stringify(this.state.searchTerm)} */}
         <Searchbar searchValue={this.state.searchTerm} queryHandler={this.updateQuery} />
-        { contacts }
+        { showingContacts }
+
+     {/* LOGIC FOR THE RESULTS AND RESET DISPLAY */}
+        {this.state.searchTerm.length > 0 && showingContacts.length !== this.state.contacts.length && ( 
+          <div className='showing-contacts'>
+            <span>Now showing {showingContacts.props.contacts.length} of {this.state.contacts.length} total</span>
+            <button onClick={this.resetContacts}>Show all</button>
+          </div>
+        )}
+
         { this.state.modalMessage.length > 0 && ( 
         <Modal message={this.state.modalMessage} /> )}
       </div>

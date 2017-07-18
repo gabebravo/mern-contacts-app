@@ -61,22 +61,23 @@ class EditUserContianer extends Component {
   }
 
   render() {
+    const { name, email, modalMessage } = this.state;
     return (
       <div>
         <EditForm btnText="Update Contact"
-          name={this.state.name} email={this.state.email}
+          name={name} email={email}
           handleName={this.setName} handleEmail={this.setEmail}
           handleSubmit={this.updateContactInfo}
         />
-        { this.state.modalMessage.length > 0 && (
-        <Modal message={this.state.modalMessage} /> )}
+        { modalMessage.length > 0 && (
+        <Modal message={modalMessage} /> )}
       </div>
     );
   }
 }
 
 EditUserContianer.propTypes ={
-  id: PropTypes.string
+  id: PropTypes.string.isRequired
 }
 
 export default EditUserContianer;
